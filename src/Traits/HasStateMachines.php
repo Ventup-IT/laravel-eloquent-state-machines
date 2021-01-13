@@ -8,7 +8,7 @@ use Asantibanez\LaravelEloquentStateMachines\StateMachines\State;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Javoscript\MacroableModels\Facades\MacroableModels;
-use Str;
+use Illuminate\Support\Str;
 
 /**
  * Trait HasStateMachines
@@ -28,14 +28,14 @@ trait HasStateMachines
                     return new State($this->{$stateMachine->field}, $stateMachine);
                 });
 
-                $camelField = Str::of($field)->camel();
+                $camelField = Str::camel($field);
 
                 MacroableModels::addMacro(static::class, $camelField, function () use ($field) {
                     $stateMachine = new $this->stateMachines[$field]($field, $this);
                     return new State($this->{$stateMachine->field}, $stateMachine);
                 });
 
-                $studlyField = Str::of($field)->studly();
+                $studlyField = Str::studly($field);
 
                 Builder::macro("whereHas{$studlyField}", function ($callable) use ($field) {
                     $model = $this->getModel();
